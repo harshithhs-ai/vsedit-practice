@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataMites | Wall Split</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@900&display=swap" rel="stylesheet">
+
+    <style>
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background-color: #ffffff; 
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
+        }
+
+        .wall {
+            position: fixed; top: 0; width: 50%; height: 100%;
+            background-color: #ffffff; z-index: 20;
+            display: flex; align-items: center; overflow: hidden;
+        }
+
+        .left-wall { left: 0; justify-content: flex-end; border-right: 1px solid #eee; }
+        .right-wall { right: 0; justify-content: flex-start; }
+
+        .brand-part {
+            font-size: clamp(3rem, 15vw, 12rem);
+            font-weight: 900;
+            white-space: nowrap;
+            letter-spacing: -2px;
+        }
+
+        .blue { color: #0A58CA; }
+        .orange { color: #FF6B00; }
+
+        .trigger-btn {
+            position: fixed; bottom: 10%; left: 50%; transform: translateX(-50%);
+            z-index: 30; padding: 15px 45px; background: #000; color: #fff;
+            border: none; border-radius: 4px; cursor: pointer;
+            font-weight: bold; letter-spacing: 2px; transition: all 0.3s ease;
+        }
+
+        .trigger-btn:hover { background: #FF6B00; }
+    </style>
+</head>
+<body>
+
+    <div class="wall left-wall" id="lWall">
+        <span class="brand-part blue">DATA</span>
+    </div>
+
+    <div class="wall right-wall" id="rWall">
+        <span class="brand-part orange">MITES</span>
+    </div>
+
+    <div class="flex items-center justify-center h-full">
+        <p class="text-gray-300 text-xs tracking-widest opacity-0" id="statusText">
+            REDIRECTING TO SELECTOR...
+        </p>
+    </div>
+
+    <button class="trigger-btn" id="startBtn" onclick="splitWall()">Welcome</button>
+
+    <script>
+        function splitWall() {
+            const tl = gsap.timeline();
+
+            // 1. ಬಟನ್ ಹೈಡ್ ಮಾಡೋದು
+            tl.to("#startBtn", { opacity: 0, scale: 0.5, duration: 0.4, pointerEvents: "none" })
+            
+            // 2. ಮ್ಯಾಜಿಕ್ ಸ್ಪ್ಲಿಟ್ ಅನಿಮೇಷನ್
+            .to("#lWall", { 
+                xPercent: -100, 
+                duration: 1.8, 
+                ease: "power4.inOut" 
+            }, "+=0.1")
+            .to("#rWall", { 
+                xPercent: 100, 
+                duration: 1.8, 
+                ease: "power4.inOut" 
+            }, "<")
+            
+            // 3. ಸ್ಪ್ಲಿಟ್ ಮುಗಿದ ಮೇಲೆ selector.html ಗೆ ಹೋಗೋದು
+            .to("#statusText", { 
+                opacity: 1, 
+                duration: 0.5,
+                onComplete: () => {
+                    // 🔗 ಇಲ್ಲಿ ಮ್ಯಾಜಿಕ್ ಇದೆ: ನೇರವಾಗಿ ಸೆಲೆಕ್ಟರ್ ಪೇಜ್‌ಗೆ ಹೋಗುತ್ತೆ
+                    window.location.href = "selector.html";
+                }
+            }, "-=0.3");
+        }
+        function navigate(view) {
+    if(view === 'mobile') {
+        window.location.href = "mobile-hero.html"; // ಮೊಬೈಲ್ ಪೇಜ್‌ಗೆ ಲಿಂಕ್
+    } else {
+        alert("Laptop version loading...");
+    }
+}
+    </script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Identify | DataMites</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Noto+Sans+Kannada:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background: #ffffff; 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column;
+            overflow: hidden; 
+        }
+        .kannada { font-family: 'Noto Sans Kannada', sans-serif; }
+
+        /* 🖼️ Image Section - Height Fix */
+        .hero-img-box {
+            flex: 0 0 35vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .hero-img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        .options-box {
+            flex: 1;
+            padding: 0 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .hero-card {
+            background: #ffffff;
+            border: 2px solid #F1F5F9;
+            border-radius: 20px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .hero-card.active {
+            border-color: #2563EB;
+            background: #F0F7FF;
+            transform: scale(1.02);
+        }
+
+        .dot {
+            width: 20px; height: 20px;
+            border: 2px solid #CBD5E1;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .active .dot { border-color: #2563EB; background: #2563EB; }
+        .active .dot::after { content: ''; width: 8px; height: 8px; background: white; border-radius: 50%; }
+
+        .next-btn {
+            background: #2563EB;
+            color: white;
+            width: 100%;
+            padding: 18px;
+            border-radius: 20px;
+            font-weight: 800;
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: 0.4s;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
+        }
+        .next-btn.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    </style>
+</head>
+<body>
+
+    <div class="pt-10 text-center px-6">
+        <h1 class="text-3xl font-black text-slate-900 leading-tight">
+            WHO IS THE <span class="text-blue-600">HERO?</span>
+        </h1>
+    </div>
+
+    <div class="hero-img-box">
+        <img src="assets/hero-bot.png" alt="Hero Image" class="hero-img" id="heroImg">
+    </div>
+
+    <div class="options-box">
+        <div class="hero-card shadow-sm" onclick="select(this, 'student')">
+            <div class="flex items-center gap-4">
+                <span class="text-2xl">🎓</span>
+                <div>
+                    <h3 class="font-bold text-slate-800 text-sm">I'm a Student</h3>
+                    <p class="kannada text-[10px] text-slate-400">ಹೊಸ ಕೆರಿಯರ್ ಆರಂಭಿಸುತ್ತಿದ್ದೇನೆ.</p>
+                </div>
+            </div>
+            <div class="dot"></div>
+        </div>
+
+        <div class="hero-card shadow-sm" onclick="select(this, 'pro')">
+            <div class="flex items-center gap-4">
+                <span class="text-2xl">💼</span>
+                <div>
+                    <h3 class="font-bold text-slate-800 text-sm">Professional</h3>
+                    <p class="kannada text-[10px] text-slate-400">ಸ್ಕಿಲ್ ಅಪ್‌ಗ್ರೇಡ್ ಮಾಡಬೇಕಿದೆ.</p>
+                </div>
+            </div>
+            <div class="dot"></div>
+        </div>
+
+        <div class="hero-card shadow-sm" onclick="select(this, 'corporate')">
+            <div class="flex items-center gap-4">
+                <span class="text-2xl">🏢</span>
+                <div>
+                    <h3 class="font-bold text-slate-800 text-sm">Corporate / Other</h3>
+                    <p class="kannada text-[10px] text-slate-400">ತಂಡದ ಬೆಳವಣಿಗೆಗೆ ದಾರಿ ಹುಡುಕುತ್ತಿದ್ದೇನೆ.</p>
+                </div>
+            </div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <div class="p-6">
+        <button id="nextBtn" onclick="move()" class="next-btn">
+            CONTINUE JOURNEY →
+        </button>
+    </div>
+
+    <script>
+        let selectedRole = "";
+        function select(el, role) {
+            selectedRole = role;
+            document.querySelectorAll('.hero-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('nextBtn').classList.add('show');
+            gsap.from(el, { scale: 0.98, duration: 0.2 });
+        }
+        function move() {
+            window.location.href = "student-hero.html?role=" + selectedRole;
+        }
+    </script>
+</body>
+</html>

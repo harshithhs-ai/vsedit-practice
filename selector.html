@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Experience | DataMites</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;900&family=Noto+Sans+Kannada:wght@400&display=swap" rel="stylesheet">
+    <style>
+        /* ಪೂರ್ತಿ ಪೇಜ್ ಹೈಟ್ ಮತ್ತು ಫಾಂಟ್ ಸೆಟ್ಟಿಂಗ್ */
+        body, html { 
+            height: 100%; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Outfit', 'Noto Sans Kannada', sans-serif; 
+            background: #ffffff; 
+            overflow: hidden; 
+        }
+
+        /* ಕಾರ್ಡ್ ಡಿಸೈನ್ */
+        .option-card { 
+            border: 1px solid #e2e8f0; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            width: 280px; 
+            padding: 30px; 
+            text-align: center; 
+            background: white;
+        }
+        
+        .option-card:hover { 
+            border-color: #0A58CA; 
+            transform: translateY(-5px); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+        }
+
+        .icon-box { 
+            background: #f8fafc; 
+            border-radius: 16px; 
+            width: 60px; 
+            height: 60px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin: 0 auto 15px; 
+            font-size: 24px; 
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen">
+
+    <div class="text-center px-5">
+        <div class="mb-10 reveal">
+            <h1 class="text-3xl font-black text-slate-900 uppercase tracking-tight">
+                Choose Your <span class="text-[#FF6B00]">Screen</span>
+            </h1>
+            <p class="text-slate-400 text-sm mt-2">ನಿಮ್ಮ ಡಿವೈಸ್‌ಗೆ ತಕ್ಕಂತೆ ಆಯ್ಕೆ ಮಾಡಿ.</p>
+        </div>
+
+        <div class="flex flex-col items-center gap-6 reveal">
+            <div class="option-card" onclick="navigate('laptop')">
+                <div class="icon-box">💻</div>
+                <h3 class="font-bold text-slate-800">Laptop View</h3>
+            </div>
+
+            <div class="option-card" onclick="navigate('mobile')">
+                <div class="icon-box">📱</div>
+                <h3 class="font-bold text-slate-800">Mobile View</h3>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ಆರಂಭಿಕ ಅನಿಮೇಷನ್
+        window.onload = () => {
+            gsap.from(".reveal", { 
+                opacity: 0, 
+                y: 30, 
+                duration: 1, 
+                stagger: 0.2, 
+                ease: "power3.out" 
+            });
+        };
+
+function navigate(view) {
+    gsap.to("body", { 
+        opacity: 0, 
+        duration: 0.5, 
+        onComplete: () => {
+            if (view === 'mobile') {
+                // 🔗 ಈ ಕೆಳಗಿನ ಲೈನ್ ಅನ್ನು ಮಾತ್ರ ಬದಲಾಯಿಸಿ
+                window.location.href = "who-are-you.html"; 
+            } else {
+                alert("Laptop View ಇನ್ನು ತಯಾರಾಗುತ್ತಿದೆ!");
+                gsap.to("body", { opacity: 1 });
+            }
+        }
+    });
+}
+    </script>
+</body>
+</html>
