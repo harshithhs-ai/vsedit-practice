@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Critical Warning | Bio-Auth</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;900&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #000; color: #fff; 
+            font-family: 'Outfit', sans-serif;
+            height: 100dvh; overflow: hidden;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .neon-text {
+            font-size: 55px; line-height: 0.9; font-weight: 900;
+            text-align: center; text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #fff;
+            animation: pulse-white 1.5s infinite alternate;
+            margin-top: 100px;
+        }
+
+        @keyframes pulse-white {
+            0% { opacity: 1; text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #fff; }
+            100% { opacity: 0.4; text-shadow: 0 0 2px #fff, 0 0 5px #fff; }
+        }
+
+        .bio-container {
+            margin-top: auto; margin-bottom: 40px;
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+        }
+
+        .scanner-box {
+            width: 100px; height: 130px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px; position: relative; overflow: hidden;
+            background: rgba(255, 255, 255, 0.02);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.3s;
+        }
+
+        .scan-line {
+            position: absolute; width: 100%; height: 2px;
+            background: #fff; box-shadow: 0 0 15px #fff;
+            top: 0; z-index: 10;
+        }
+
+        .finger-icon { width: 60px; fill: #fff; opacity: 0.2; transition: 0.3s; }
+
+        .timer-box {
+            padding: 8px 20px; border-radius: 5px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        #timer-display { font-size: 12px; letter-spacing: 4px; font-weight: 900; color: #666; }
+        #seconds { color: #fff; }
+
+        .abort-link { position: absolute; top: 30px; left: 30px; font-size: 10px; letter-spacing: 3px; opacity: 0.3; }
+    </style>
+</head>
+<body>
+
+    <div class="abort-link" onclick="history.back()">[ ABORT_EXIT ]</div>
+
+    <div class="px-10">
+        <h1 class="neon-text">NO TIME<br>PASSERS</h1>
+        
+        <div class="mt-10 text-slate-500 text-[11px] text-center leading-relaxed tracking-wide">
+            <p class="mb-4 text-white font-bold opacity-80 uppercase tracking-[2px]">Authorization Required</p>
+            <p>Scanning for intent. If you are here to browse, leave now. We value time as much as you value yours.</p>
+        </div>
+    </div>
+
+    <div class="bio-container">
+        <div class="scanner-box" id="scanner">
+            <div class="scan-line" id="line"></div>
+            <svg class="finger-icon" viewBox="0 0 24 24">
+                <path d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M12,20c-4.41,0-8-3.59-8-8s3.59-8,8-8s8,3.59,8,8 S16.41,20,12,20z M12,6c-3.31,0-6,2.69-6,6s2.69,6,6,6s6-2.69,6-6S15.31,6,12,6z M12,16c-2.21,0-4-1.79-4-4s1.79-4,4-4s4,1.79,4,4 S14.21,16,12,16z"/>
+            </svg>
+        </div>
+
+        <p id="direction-hint" class="text-[9px] tracking-[3px] uppercase opacity-40 transition-all duration-300">
+            Hold for 2 seconds to scan
+        </p>
+
+        <div class="timer-box">
+            <div id="timer-display">
+                AUTO-ABORT: <span id="seconds">10</span>S
+            </div>
+        </div>
+    </div>
+
+    <script>
+        gsap.to("#line", { top: "100%", duration: 1.5, repeat: -1, yoyo: true, ease: "power1.inOut" });
+
+        let timeLeft = 10;
+        const secondsSpan = document.getElementById("seconds");
+        const countdown = setInterval(() => {
+            timeLeft--;
+            secondsSpan.innerText = timeLeft;
+            if(timeLeft <= 3) secondsSpan.style.color = "#ff0000";
+            if(timeLeft === 0) {
+                clearInterval(countdown);
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+                history.back();
+            }
+        }, 1000);
+
+        const scanner = document.getElementById('scanner');
+        const icon = document.querySelector('.finger-icon');
+        const hint = document.getElementById('direction-hint'); // Added reference
+        let holdTrigger;
+
+        scanner.addEventListener('mousedown', startHold);
+        scanner.addEventListener('touchstart', (e) => { e.preventDefault(); startHold(); });
+        scanner.addEventListener('mouseup', endHold);
+        scanner.addEventListener('touchend', endHold);
+
+        function startHold() {
+            icon.style.opacity = "1";
+            scanner.style.borderColor = "#fff";
+            scanner.style.boxShadow = "0 0 20px rgba(255,255,255,0.2)";
+            
+            // Update Hint
+            hint.innerText = "Scanning... Keep Holding";
+            hint.style.opacity = "1";
+            hint.style.color = "#fff";
+
+            if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
+
+            holdTrigger = setTimeout(() => {
+                clearInterval(countdown);
+                hint.innerText = "Identity Verified";
+                if (navigator.vibrate) navigator.vibrate(300);
+                gsap.to("body", { opacity: 0, duration: 0.5, onComplete: () => {
+                    window.location.href = "course-details.html";
+                }});
+            }, 2000);
+        }
+
+        function endHold() {
+            clearTimeout(holdTrigger);
+            icon.style.opacity = "0.2";
+            scanner.style.borderColor = "rgba(255, 255, 255, 0.1)";
+            scanner.style.boxShadow = "none";
+            
+            // Reset Hint
+            hint.innerText = "Hold for 2 seconds to scan";
+            hint.style.opacity = "0.4";
+            hint.style.color = "inherit";
+
+            if (navigator.vibrate) navigator.vibrate(0);
+        }
+    </script>
+</body>
+</html>

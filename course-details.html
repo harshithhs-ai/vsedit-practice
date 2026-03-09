@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MISSION: ALPHA | SYLLABUS</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* 🚫 REMOVE ALL DISTURBING SCROLLBARS */
+        ::-webkit-scrollbar { display: none; }
+        html, body { 
+            scrollbar-width: none; -ms-overflow-style: none;
+            background: #000; color: #fff; 
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* 🔋 SLEEK SPARK CHARGER (Right Side Layout) */
+        .charge-track {
+            position: fixed; right: 15px; top: 20dvh;
+            height: 60dvh; width: 8px; /* Small & non-disturbing */
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px; z-index: 1000;
+            display: flex; flex-direction: column-reverse;
+        }
+
+        .charge-level {
+            width: 100%; height: 0%; 
+            border-radius: 20px;
+            background: #ff4d4d; /* Starts Red */
+            box-shadow: 0 0 15px #ff4d4d;
+            position: relative;
+            transition: background 0.4s ease;
+        }
+
+        /* ⚡ ELECTRIC SPARK */
+        .spark-head {
+            position: absolute; top: -5px; left: 50%;
+            transform: translateX(-50%);
+            width: 12px; height: 12px;
+            background: #fff; border-radius: 50%;
+            box-shadow: 0 0 15px #fff, 0 0 30px #3b82f6;
+            opacity: 0;
+        }
+
+        /* 💎 CONTENT STYLING */
+        .mission-section {
+            min-height: 100vh; width: 100%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 0 40px; text-align: center;
+            position: relative;
+        }
+
+        .giant-alpha {
+            font-size: 20vw; line-height: 0.8; font-weight: 900;
+            background: linear-gradient(to bottom, #fff 40%, #3b82f6 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            letter-spacing: -2px; margin-bottom: 25px;
+        }
+
+        .punch-h1 { font-size: 28px; font-weight: 900; text-transform: uppercase; line-height: 1.1; }
+        .desc-p { font-size: 13px; color: #64748b; margin-top: 20px; max-width: 280px; line-height: 1.6; }
+
+        .video-box {
+            width: 100%; max-width: 400px; aspect-ratio: 16/9;
+            background: #0a0a0a; border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px; margin-top: 30px; overflow: hidden;
+        }
+
+        .cta-btn {
+            margin-top: 40px; padding: 15px 40px; background: white; color: black;
+            font-weight: 900; border-radius: 50px; font-size: 12px;
+            letter-spacing: 2px; text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="charge-track">
+        <div class="charge-level" id="charge-level">
+            <div class="spark-head" id="spark"></div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        
+        <section class="mission-section">
+            <p class="text-[10px] tracking-[4px] text-blue-500 font-bold mb-4">[ IDENTITY CHECK ]</p>
+            <h1 class="giant-alpha">ALPHA</h1>
+            <div class="punch-h1">MAINTAIN THIS ENERGY<br>OR REMAIN A NOBODY.</div>
+            <p class="desc-p">Consistency defines the ALPHA. The moment you slack, you lose the title.</p>
+        </section>
+
+        <section class="mission-section">
+            <div class="punch-h1">ANALYZE THE DATA</div>
+            <div class="video-box">
+                <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-40">
+                    <source src="assets/panther-eyes.mp4" type="video/mp4">
+                </video>
+            </div>
+            <p class="desc-p">An AI Engineer turns chaos into clear intelligence.</p>
+        </section>
+
+        <section class="mission-section">
+            <p class="text-[10px] tracking-[4px] text-blue-500 font-bold mb-2">CAREER GOAL</p>
+            <div class="text-6xl font-black italic">11.5 LPA</div>
+            <p class="desc-p">Industry average for high-skill AI developers with no degree.</p>
+        </section>
+
+        <section class="mission-section">
+            <div class="punch-h1">FULL CAREER<br>SYLLABUS<br>READY FOR<br>LAUNCH</div>
+            <button onclick="location.href='syllabus.html'" class="cta-btn">ACCEPT MISSION</button>
+        </section>
+
+    </div>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        const level = document.getElementById('charge-level');
+        const spark = document.getElementById('spark');
+
+        // 🔋 REALISTIC CHARGING LOGIC
+        ScrollTrigger.create({
+            trigger: "body",
+            start: "top top",
+            end: "bottom bottom",
+            onUpdate: (self) => {
+                const progress = self.progress;
+                const percent = progress * 100;
+
+                // Update Fill Height
+                level.style.height = `${percent}%`;
+                
+                // Show Spark when moving
+                spark.style.opacity = progress > 0 ? 1 : 0;
+
+                // COLOR CHANGE: Red -> Yellow -> Green
+                if (percent < 35) {
+                    level.style.background = "#ff4d4d"; // Red
+                    level.style.boxShadow = "0 0 15px #ff4d4d";
+                } else if (percent < 75) {
+                    level.style.background = "#fbbf24"; // Yellow
+                    level.style.boxShadow = "0 0 15px #fbbf24";
+                } else {
+                    level.style.background = "#22c55e"; // Green
+                    level.style.boxShadow = "0 0 20px #22c55e";
+                    spark.style.boxShadow = "0 0 20px #fff, 0 0 40px #22c55e";
+                }
+
+                // Realistic Spark Jitter
+                spark.style.transform = `translateX(-50%) scale(${1 + Math.random() * 0.4})`;
+            }
+        });
+
+        // SMOOTH CONTENT REVEAL
+        gsap.utils.toArray(".mission-section").forEach(section => {
+            gsap.from(section.querySelectorAll("h1, div, p, button, .video-box"), {
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                },
+                y: 40, opacity: 0, duration: 1, stagger: 0.15, ease: "power2.out"
+            });
+        });
+    </script>
+</body>
+</html>s

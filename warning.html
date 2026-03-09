@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Critical Warning | Entry Restricted</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;900&display=swap" rel="stylesheet">
+
+    <style>
+        body { 
+            background: #000; color: #ff3333; 
+            font-family: 'Outfit', sans-serif;
+            height: 100dvh; overflow: hidden;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* 🚨 Red Laser Scan Effect */
+        .scan-line {
+            position: fixed; top: -100px; left: 0; width: 100%; height: 4px;
+            background: rgba(255, 0, 0, 0.7);
+            box-shadow: 0 0 20px #ff0000;
+            z-index: 100; pointer-events: none;
+            animation: scan 3s linear infinite;
+        }
+        @keyframes scan { 0% { top: -10% } 100% { top: 110% } }
+
+        /* 🐾 Glitchy Panther Eye (Corner) */
+        #corner-eye {
+            position: fixed; width: 80px; height: 80px; opacity: 0;
+            pointer-events: none; transition: 0.2s ease; z-index: 50;
+        }
+
+        /* 💎 Critical Header */
+        .warning-box {
+            margin-top: 60px; text-align: center; padding: 0 30px;
+        }
+        .status-tag {
+            border: 1px solid #ff3333; padding: 4px 12px;
+            font-size: 10px; letter-spacing: 4px; font-weight: 900;
+            border-radius: 2px; display: inline-block; margin-bottom: 20px;
+            animation: blink 0.8s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0 } }
+
+        /* 🔘 Biometric Fingerprint Button */
+        .bio-container {
+            margin-top: auto; margin-bottom: 60px;
+            display: flex; flex-direction: column; align-items: center; gap: 20px;
+        }
+        .fingerprint-btn {
+            width: 90px; height: 90px;
+            border: 2px solid #ff3333; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; position: relative;
+            background: rgba(255, 0, 0, 0.05);
+            transition: 0.3s;
+        }
+        .fingerprint-btn svg { width: 50px; fill: #ff3333; }
+        .hold-progress {
+            position: absolute; inset: -4px;
+            border: 4px solid #ff3333; border-radius: 50%;
+            border-top-color: transparent; border-left-color: transparent;
+            transform: rotate(0deg); opacity: 0;
+        }
+
+        .back-link { position: absolute; top: 30px; left: 30px; font-size: 10px; letter-spacing: 2px; color: #444; }
+    </style>
+</head>
+<body>
+
+    <div class="scan-line"></div>
+    <div class="back-link" onclick="history.back()">— ABORT</div>
+
+    <img src="assets/panther-eyes.mp4" id="corner-eye" alt=""> <div class="warning-box">
+        <div class="status-tag">ACCESS RESTRICTED</div>
+        <h1 class="text-6xl font-black leading-none mb-8">NO TIME<br>PASSERS_</h1>
+        
+        <div class="text-sm tracking-wider leading-relaxed text-red-800 font-medium">
+            <p class="mb-6">DEDICATION IS NON-NEGOTIABLE.</p>
+            <p class="text-slate-400">
+                This course is for the <span class="text-white">Relentless.</span> If you are here to browse, leave now. We value your time as much as ours. 
+                <br><br>
+                <span class="text-red-500">Only the obsessed may proceed.</span>
+            </p>
+        </div>
+    </div>
+
+    <div class="bio-container">
+        <div class="fingerprint-btn" id="bio-btn">
+            <div class="hold-progress" id="progress"></div>
+            <svg viewBox="0 0 24 24"><path d="M12,1C5.9,1,1,5.9,1,12s4.9,11,11,11s11-4.9,11-11S18.1,1,12,1z M12,21c-5,0-9-4-9-9s4-9,9-9s9,4,9,9S17,21,12,21z M11,7h2v6h-2V7z M11,15h2v2h-2V15z"/></svg>
+        </div>
+        <p class="text-[9px] tracking-[4px] font-black uppercase opacity-50">Hold to Authenticate</p>
+    </div>
+
+    <script>
+        // 🐾 Eye Follow Logic (Logic 3)
+        document.addEventListener('mousemove', (e) => {
+            const eye = document.getElementById('corner-eye');
+            if(Math.random() > 0.95) { // Random appearances
+                eye.style.opacity = '0.4';
+                eye.style.left = e.pageX + 'px';
+                eye.style.top = e.pageY + 'px';
+                setTimeout(() => eye.style.opacity = '0', 500);
+            }
+        });
+
+        // 🔘 Biometric Long Press (Logic 4)
+        let timer;
+        const btn = document.getElementById('bio-btn');
+        const prog = document.getElementById('progress');
+
+        btn.addEventListener('mousedown', startHold);
+        btn.addEventListener('touchstart', startHold);
+        btn.addEventListener('mouseup', stopHold);
+        btn.addEventListener('touchend', stopHold);
+
+        function startHold() {
+            prog.style.opacity = '1';
+            gsap.to(prog, { rotation: 360, duration: 2, ease: "none" });
+            timer = setTimeout(() => {
+                alert("IDENTITY VERIFIED. ENTERING NEURAL NETWORK.");
+                window.location.href = "course-details.html"; // Next Page
+            }, 2000);
+        }
+
+        function stopHold() {
+            clearTimeout(timer);
+            prog.style.opacity = '0';
+            gsap.killTweensOf(prog);
+            gsap.set(prog, { rotation: 0 });
+        }
+    </script>
+</body>
+</html>
